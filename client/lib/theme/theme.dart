@@ -13,6 +13,7 @@ class AppTheme {
       onError: Colors.yellow,
       surface: Color.fromARGB(255, 249, 255, 238),
       onSurface: Colors.black,
+      scrim: Colors.grey,
     ),
     textTheme: GoogleFonts.publicSansTextTheme(),
   );
