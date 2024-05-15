@@ -11,7 +11,7 @@ class AppTheme {
       onSecondary: Colors.black,
       error: Colors.red,
       onError: Colors.yellow,
-      surface: Color.fromARGB(255, 249, 255, 238),
+      surface: Color.fromARGB(255, 255, 255, 255),
       onSurface: Colors.black,
       scrim: Colors.grey,
     ),
@@ -48,4 +48,8 @@ class AppTheme {
 
   static double extraLargeWidth = 300.0;
   static double extraLargeHeight = 80.0;
+
+  // brealPoints
+  static double smallBreakPoint = 600;
+  static double mediumBreakPoint = 1100;
 }
