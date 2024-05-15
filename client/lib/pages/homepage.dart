@@ -1,6 +1,7 @@
 import 'package:client/routes/app_routes.dart';
 import 'package:client/theme/theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:vrouter/vrouter.dart';
 
 class HomePage extends StatefulWidget {
@@ -11,11 +12,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late Future<void> initFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    initFuture = _initFuture();
+  }
+
+  Future<void> _initFuture() async {
+    FlutterSecureStorage storage = const FlutterSecureStorage();
+    String? token = await storage.read(key: 'token');
+    print(token);
+    if (token != null) {
+      // ignore: use_build_context_synchronously
+      context.vRouter.to(AppRoutes.loginRoute);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
     ColorScheme colors = theme.colorScheme;
     TextTheme textTheme = theme.textTheme;
+
     return Scaffold(
       appBar: AppBar(
         elevation: 4,
@@ -92,6 +112,34 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.live_tv,
+              size: 100,
+              color: colors.primary,
+            ),
+            const SizedBox(height: 20),
+            Text(
+              "Live Video Streaming",
+              style: textTheme.headlineMedium!.copyWith(
+                color: colors.primary,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 10),
+            Text(
+              "Watch live video streams from around the world.",
+              textAlign: TextAlign.center,
+              style: textTheme.bodyMedium!.copyWith(
+                color: colors.onPrimary,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

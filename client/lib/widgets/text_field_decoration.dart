@@ -1,18 +1,33 @@
-import 'package:client/theme/theme.dart';
 import 'package:flutter/material.dart';
 
-InputDecoration textFieldDecoration({required String hintText, required ColorScheme colors}) {
+InputDecoration textFieldDecoration({
+  required String hintText,
+  required ColorScheme colors,
+  bool isPassword = false,
+  bool passwordVisible = false,
+  VoidCallback? onVisibiltyToggled,
+}) {
   return InputDecoration(
     hintText: hintText,
     floatingLabelBehavior: FloatingLabelBehavior.never,
     filled: true,
-    fillColor: Colors.grey[100],
-    contentPadding: EdgeInsets.symmetric(
-      horizontal: AppTheme.smallPadding,
-      vertical: AppTheme.smallPadding,
-    ),
+    contentPadding: const EdgeInsets.symmetric(
+      horizontal: 16,
+      vertical: 12,
+    ), // Adjust padding here
+    suffix: isPassword
+        ? IconButton(
+            icon: Icon(
+              size: 16,
+              passwordVisible
+                  ? Icons.visibility_outlined
+                  : Icons.visibility_off_outlined,
+            ),
+            onPressed: onVisibiltyToggled,
+          )
+        : null,
     border: OutlineInputBorder(
-      borderSide: BorderSide.none,
+      borderSide: const BorderSide(width: 1, color: Colors.grey),
       borderRadius: BorderRadius.circular(0),
     ),
     focusedBorder: OutlineInputBorder(
@@ -27,6 +42,7 @@ InputDecoration textFieldDecoration({required String hintText, required ColorSch
       borderSide: BorderSide(color: colors.error, width: 2),
       borderRadius: BorderRadius.circular(0),
     ),
-    errorStyle: TextStyle(color: colors.error, backgroundColor: colors.onPrimary),
+    errorStyle:
+        TextStyle(color: colors.error, backgroundColor: colors.onPrimary),
   );
 }
