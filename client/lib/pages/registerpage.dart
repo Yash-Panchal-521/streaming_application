@@ -62,8 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                     ),
                   ),
                   Expanded(
-                    child: _buildRegisterWidget(
-                        context, colors, textTheme, screenWidth, screenHeight),
+                    child: _buildRegisterWidget(context, colors, textTheme, screenWidth, screenHeight),
                   ),
                 ],
               );
@@ -83,16 +82,13 @@ class _RegisterPageState extends State<RegisterPage> {
   ) {
     return SingleChildScrollView(
       child: Container(
-        padding: EdgeInsets.symmetric(
-            horizontal: AppTheme.mediumPadding,
-            vertical: AppTheme.mediumPadding), // Adjust padding here
+        padding: EdgeInsets.symmetric(horizontal: AppTheme.mediumPadding, vertical: AppTheme.mediumPadding), // Adjust padding here
         width: screenWidth > 600 ? screenWidth / 2 : screenWidth,
         height: screenHeight,
         child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment:
-                CrossAxisAlignment.start, // Align fields to the start
+            crossAxisAlignment: CrossAxisAlignment.start, // Align fields to the start
             children: [
               Center(
                 child: Padding(
@@ -145,11 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 label: "Register",
                 onPressed: () {
                   if (Form.of(context).validate()) {
-                    register(emailController.text, passwordController.text,
-                        usernameController.text);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text("Registration successful")),
-                    );
+                    register(emailController.text, passwordController.text, usernameController.text, context);
                   }
                 },
                 colors: colors,

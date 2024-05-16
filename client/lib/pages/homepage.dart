@@ -23,10 +23,9 @@ class _HomePageState extends State<HomePage> {
   Future<void> _initFuture() async {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
-    print(token);
     if (token != null) {
       // ignore: use_build_context_synchronously
-      context.vRouter.to(AppRoutes.loginRoute);
+      context.vRouter.to(AppRoutes.dashboard);
     }
   }
 
@@ -60,8 +59,7 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.symmetric(horizontal: AppTheme.mediumPadding),
             child: ElevatedButton(
               style: ButtonStyle(
-                backgroundColor:
-                    WidgetStateProperty.all<Color>(colors.onPrimary),
+                backgroundColor: WidgetStateProperty.all<Color>(colors.onPrimary),
                 shape: WidgetStateProperty.all<RoundedRectangleBorder>(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(0),

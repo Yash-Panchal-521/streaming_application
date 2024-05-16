@@ -50,8 +50,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
                 Expanded(
-                  child: _buildLoginWidget(
-                      context, colors, textTheme, constraints),
+                  child: _buildLoginWidget(context, colors, textTheme, constraints),
                 ),
               ],
             );
@@ -138,7 +137,7 @@ class _LoginPageState extends State<LoginPage> {
                 label: "Login",
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
-                    login(emailController.text, passwordController.text);
+                    login(emailController.text, passwordController.text, context);
                   }
                 },
                 colors: colors,

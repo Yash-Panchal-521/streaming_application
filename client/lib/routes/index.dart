@@ -1,3 +1,4 @@
+import 'package:client/pages/dashboardpage.dart';
 import 'package:client/pages/homepage.dart';
 import 'package:client/pages/loginpage.dart';
 import 'package:client/pages/registerpage.dart';
@@ -10,7 +11,8 @@ class ConnectedRoutes extends VRouteElementBuilder {
     return [
       VWidget(path: AppRoutes.homeRoute, widget: const HomePage()),
       VWidget(path: AppRoutes.loginRoute, widget: const LoginPage()),
-      VWidget(path: AppRoutes.registerRoute, widget: const RegisterPage())
+      VWidget(path: AppRoutes.registerRoute, widget: const RegisterPage()),
+      VWidget(path: AppRoutes.dashboard, widget: const Dashboardpage())
     ];
   }
 }

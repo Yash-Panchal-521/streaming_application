@@ -7,7 +7,7 @@ class AppTheme {
       brightness: Brightness.light,
       primary: Color(0xff0E34A0),
       onPrimary: Colors.white,
-      secondary: Color(0xffE08E45),
+      secondary: Color(0xFF00BEF8),
       onSecondary: Colors.black,
       error: Colors.red,
       onError: Colors.yellow,
