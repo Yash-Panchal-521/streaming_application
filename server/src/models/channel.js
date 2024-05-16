@@ -9,7 +9,7 @@ const channelSchema = new Schema({
     isActive: { type: Boolean, default: false },
     title: { type: String, default: defaultTitle },
     description: { type: String, default: defaultDescription },
-    avatrUrl: { type: String, default: 'none' },
+    avatarUrl: { type: String, default: 'none' },
     streamKey: { type: String, default: uuid() },
     messages: [{ type: Schema.Types.ObjectId, ref: 'Message', default: [] }],
 });
