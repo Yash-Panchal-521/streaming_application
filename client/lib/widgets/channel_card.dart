@@ -3,7 +3,7 @@ import "package:flutter/material.dart";
 class ChannelCard extends StatefulWidget {
   final String id;
   final String title;
-  final Uri? avatarUrl;
+  final String avatarUrl;
   final String username;
   final bool isOnline;
   final VoidCallback onPressed;
@@ -12,7 +12,7 @@ class ChannelCard extends StatefulWidget {
     super.key,
     required this.id,
     required this.title,
-    this.avatarUrl,
+    required this.avatarUrl,
     required this.username,
     required this.isOnline,
     required this.onPressed,
@@ -50,7 +50,15 @@ class _ChannelCardState extends State<ChannelCard> {
           child: Column(
             children: [
               Image.network(
-                widget.avatarUrl == null ? widget.defaultURL : widget.avatarUrl.toString(),
+                widget.avatarUrl,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.network(
+                    widget.defaultURL,
+                    width: 300,
+                    height: 180,
+                    fit: BoxFit.fitWidth,
+                  );
+                },
                 width: 320,
                 height: 180,
                 fit: BoxFit.fitWidth,
@@ -60,14 +68,16 @@ class _ChannelCardState extends State<ChannelCard> {
                 children: [
                   Text(
                     widget.title,
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w900),
-                  ),
-                  Text(
-                    widget.isOnline ? 'Online' : 'Offline',
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.w900, color: widget.isOnline ? Colors.green : Colors.red),
+                        .copyWith(fontWeight: FontWeight.w900),
+                  ),
+                  Text(
+                    widget.isOnline ? 'Online' : 'Offline',
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        fontWeight: FontWeight.w900,
+                        color: widget.isOnline ? Colors.green : Colors.red),
                   ),
                 ],
               ),

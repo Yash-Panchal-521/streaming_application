@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 getChannelDetails(String channelId, BuildContext context) async {
   try {
-    var res = await http.get(Uri.parse(Api.channelsURL + channelId));
+    var res = await http.get(Uri.parse("${Api.channelsURL}/$channelId"));
 
     if (res.statusCode == 200) {
       var data = jsonDecode(res.body);

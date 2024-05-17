@@ -62,7 +62,7 @@ PreferredSizeWidget customAppBar(BuildContext context, String title) {
             context.vRouter.to(AppRoutes.settings);
           },
           child: Text(
-            "My Account",
+            "My Settings",
             style: textTheme.labelMedium!.copyWith(
               color: colors.primary,
               fontWeight: FontWeight.w900,

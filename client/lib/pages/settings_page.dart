@@ -1,3 +1,6 @@
+import 'package:client/api/get_channel_settings.dart';
+import 'package:client/api/patch_channel_password.dart';
+import 'package:client/api/put_channel_settings.dart';
 import 'package:client/theme/theme.dart';
 import 'package:client/utils/avatar_url_validator.dart';
 import 'package:client/utils/build_text_field.dart';
@@ -63,302 +66,333 @@ class _SettingsPageState extends State<SettingsPage> {
         body: Flex(
           direction: Axis.horizontal,
           children: [
-            Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: SideNavBar(followedChannels: followedChannels)),
+            const Flexible(flex: 1, fit: FlexFit.tight, child: SideNavBar()),
             Flexible(
               flex: 9,
               fit: FlexFit.tight,
-              child: Column(
-                children: [
-                  Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Channel Settings",
-                      style: textTheme.headlineMedium!
-                          .copyWith(color: colors.primary),
-                    ),
-                  ),
-                  Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: AppTheme.smallPadding),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Expanded(
-                                  child: Text("Username",
-                                      style: textTheme.bodyMedium!)),
-                              Expanded(
-                                child: buildTextField(
-                                  hintText: "Username",
-                                  controller: usernameController,
-                                  validator: validateUsername,
-                                  colors: colors,
-                                  textTheme: textTheme,
-                                ),
+              child: FutureBuilder(
+                  future: getChannelSettings(context),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      dynamic channelData = snapshot.data;
+                      usernameController.text = channelData["username"];
+                      titleController.text = channelData["title"];
+                      descriptionController.text = channelData["description"];
+                      avatarUrlController.text = channelData["avatarUrl"];
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: EdgeInsets.only(
+                                  bottom: AppTheme.smallPadding),
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Channel Settings",
+                                style: textTheme.headlineMedium!
+                                    .copyWith(color: colors.primary),
                               ),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: AppTheme.smallPadding),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Expanded(
-                                  child: Text("Title",
-                                      style: textTheme.bodyMedium!)),
-                              Expanded(
-                                child: buildTextField(
-                                  hintText: "Title",
-                                  controller: titleController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Title cannot be empty";
-                                    }
-                                    return null;
-                                  },
-                                  colors: colors,
-                                  textTheme: textTheme,
-                                ),
-                              ),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: AppTheme.smallPadding),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Expanded(
-                                  child: Text("Avatar URL",
-                                      style: textTheme.bodyMedium!)),
-                              Expanded(
-                                child: buildTextField(
-                                  hintText: "Avatar URL",
-                                  controller: avatarUrlController,
-                                  validator: validateAvatarUrl,
-                                  colors: colors,
-                                  textTheme: textTheme,
-                                ),
-                              ),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: AppTheme.smallPadding),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Expanded(
-                                  child: Text("Description",
-                                      style: textTheme.bodyMedium!)),
-                              Expanded(
-                                child: buildTextField(
-                                  hintText: "Description",
-                                  controller: descriptionController,
-                                  validator: validateDescription,
-                                  colors: colors,
-                                  textTheme: textTheme,
-                                  isTextArea: true,
-                                ),
-                              ),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: AppTheme.smallPadding,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Expanded(
-                                flex: 2,
-                                child: primaryElevatedButtonWidget(
-                                  onPressed: () {
-                                    if (formKey.currentState!.validate()) {
-                                      setState(() {
-                                        channelSettings["username"] =
-                                            usernameController.text;
-                                        channelSettings["title"] =
-                                            titleController.text;
-                                        channelSettings["description"] =
-                                            descriptionController.text;
-                                        channelSettings["avatarUrl"] =
-                                            avatarUrlController.text;
-                                      });
-                                    }
-                                  },
-                                  label: "Save Chnages",
-                                  colors: colors,
-                                ),
-                              ),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Form(
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: AppTheme.smallPadding),
-                          child: Divider(color: colors.scrim.withOpacity(0.5)),
-                        ),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                              vertical: AppTheme.smallPadding),
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Change Password",
-                            style: textTheme.headlineMedium!
-                                .copyWith(color: colors.primary),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: AppTheme.smallPadding),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Expanded(
-                                  child: Text("Current Password",
-                                      style: textTheme.bodyMedium!)),
-                              Expanded(
-                                child: buildTextField(
-                                  hintText: "Current Password",
-                                  controller: currentPasswordController,
-                                  validator: (value) {
-                                    if (value == null || value.isEmpty) {
-                                      return "Password cannot be empty";
-                                    }
-                                    return null;
-                                  },
-                                  colors: colors,
-                                  textTheme: textTheme,
-                                  isPassword: true,
-                                  passwordVisible: passwordVisible,
-                                  onVisibiltyToggled: () {
-                                    setState(() {
-                                      passwordVisible = !passwordVisible;
-                                    });
-                                  },
-                                ),
-                              ),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: AppTheme.smallPadding),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Expanded(
-                                  child: Text("New Password",
-                                      style: textTheme.bodyMedium!)),
-                              Expanded(
-                                child: buildTextField(
-                                  hintText: "New Password",
-                                  controller: newPasswordController,
-                                  validator: validatePassword,
-                                  colors: colors,
-                                  textTheme: textTheme,
-                                  isPassword: true,
-                                  passwordVisible: newPasswordVisible,
-                                  onVisibiltyToggled: () {
-                                    setState(() {
-                                      newPasswordVisible = !newPasswordVisible;
-                                    });
-                                  },
-                                ),
-                              ),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: AppTheme.smallPadding,
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(child: Container()),
-                              Expanded(
-                                flex: 2,
-                                child: primaryElevatedButtonWidget(
-                                  onPressed: () {
-                                    if (changePasswordFormKey.currentState!
-                                        .validate()) {
-                                      // Change password logic
-                                    }
-                                  },
-                                  label: "Change Password",
-                                  colors: colors,
-                                ),
-                              ),
-                              Expanded(child: Container()),
-                            ],
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: AppTheme.smallPadding),
-                    child: Divider(color: colors.scrim.withOpacity(0.5)),
-                  ),
-                  Padding(
-                    padding:
-                        EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
-                    child: Row(
-                      children: [
-                        Expanded(child: Container()),
-                        Expanded(
-                            child: Text("Stream Key",
-                                style: textTheme.bodyMedium!)),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: colors.scrim.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(
-                                  AppTheme.mediumBorderRadius),
                             ),
-                            child: Padding(
-                              padding: EdgeInsets.all(AppTheme.smallPadding),
-                              child: Align(
-                                  alignment: Alignment.centerLeft,
-                                  child:
-                                      Text("${channelSettings["streamKey"]}")),
+                            Form(
+                              key: formKey,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: AppTheme.smallPadding),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Container()),
+                                        Expanded(
+                                            child: Text("Username",
+                                                style: textTheme.bodyMedium!)),
+                                        Expanded(
+                                          child: buildTextField(
+                                            hintText: "Username",
+                                            controller: usernameController,
+                                            validator: validateUsername,
+                                            colors: colors,
+                                            textTheme: textTheme,
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: AppTheme.smallPadding),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Container()),
+                                        Expanded(
+                                            child: Text("Title",
+                                                style: textTheme.bodyMedium!)),
+                                        Expanded(
+                                          child: buildTextField(
+                                            hintText: "Title",
+                                            controller: titleController,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return "Title cannot be empty";
+                                              }
+                                              return null;
+                                            },
+                                            colors: colors,
+                                            textTheme: textTheme,
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: AppTheme.smallPadding),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Container()),
+                                        Expanded(
+                                            child: Text("Avatar URL",
+                                                style: textTheme.bodyMedium!)),
+                                        Expanded(
+                                          child: buildTextField(
+                                            hintText: "Avatar URL",
+                                            controller: avatarUrlController,
+                                            validator: validateAvatarUrl,
+                                            colors: colors,
+                                            textTheme: textTheme,
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: AppTheme.smallPadding),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Container()),
+                                        Expanded(
+                                            child: Text("Description",
+                                                style: textTheme.bodyMedium!)),
+                                        Expanded(
+                                          child: buildTextField(
+                                            hintText: "Description",
+                                            controller: descriptionController,
+                                            validator: validateDescription,
+                                            colors: colors,
+                                            textTheme: textTheme,
+                                            isTextArea: true,
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: AppTheme.smallPadding,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Container()),
+                                        Expanded(
+                                          flex: 2,
+                                          child: primaryElevatedButtonWidget(
+                                            onPressed: () async {
+                                              if (formKey.currentState!
+                                                  .validate()) {
+                                                await putChannelSettings(
+                                                  context,
+                                                  title: titleController.text,
+                                                  description:
+                                                      descriptionController
+                                                          .text,
+                                                  username:
+                                                      usernameController.text,
+                                                  avatarUrl:
+                                                      avatarUrlController.text,
+                                                );
+                                              }
+                                            },
+                                            label: "Save Chnages",
+                                            colors: colors,
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
+                            Form(
+                              key: changePasswordFormKey,
+                              child: Column(
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: AppTheme.smallPadding),
+                                    child: Divider(
+                                        color: colors.scrim.withOpacity(0.5)),
+                                  ),
+                                  Container(
+                                    padding: EdgeInsets.only(
+                                        bottom: AppTheme.smallPadding),
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Change Password",
+                                      style: textTheme.headlineMedium!
+                                          .copyWith(color: colors.primary),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: AppTheme.smallPadding),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Container()),
+                                        Expanded(
+                                            child: Text("Current Password",
+                                                style: textTheme.bodyMedium!)),
+                                        Expanded(
+                                          child: buildTextField(
+                                            hintText: "Current Password",
+                                            controller:
+                                                currentPasswordController,
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return "Password cannot be empty";
+                                              }
+                                              return null;
+                                            },
+                                            colors: colors,
+                                            textTheme: textTheme,
+                                            isPassword: true,
+                                            passwordVisible: passwordVisible,
+                                            onVisibiltyToggled: () {
+                                              setState(() {
+                                                passwordVisible =
+                                                    !passwordVisible;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        bottom: AppTheme.smallPadding),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Container()),
+                                        Expanded(
+                                            child: Text("New Password",
+                                                style: textTheme.bodyMedium!)),
+                                        Expanded(
+                                          child: buildTextField(
+                                            hintText: "New Password",
+                                            controller: newPasswordController,
+                                            validator: validatePassword,
+                                            colors: colors,
+                                            textTheme: textTheme,
+                                            isPassword: true,
+                                            passwordVisible: newPasswordVisible,
+                                            onVisibiltyToggled: () {
+                                              setState(() {
+                                                newPasswordVisible =
+                                                    !newPasswordVisible;
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                      bottom: AppTheme.smallPadding,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Expanded(child: Container()),
+                                        Expanded(
+                                          flex: 2,
+                                          child: primaryElevatedButtonWidget(
+                                            onPressed: () async {
+                                              if (changePasswordFormKey
+                                                  .currentState!
+                                                  .validate()) {
+                                                await patchChannelPassword(
+                                                    context,
+                                                    currentPasswordController
+                                                        .text,
+                                                    newPasswordController.text);
+                                                currentPasswordController.text =
+                                                    "";
+                                                newPasswordController.text = "";
+                                              }
+                                            },
+                                            label: "Change Password",
+                                            colors: colors,
+                                          ),
+                                        ),
+                                        Expanded(child: Container()),
+                                      ],
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: AppTheme.smallPadding),
+                              child:
+                                  Divider(color: colors.scrim.withOpacity(0.5)),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  bottom: AppTheme.smallPadding),
+                              child: Row(
+                                children: [
+                                  Expanded(child: Container()),
+                                  Expanded(
+                                      child: Text("Stream Key",
+                                          style: textTheme.bodyMedium!)),
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        color: colors.scrim.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(
+                                            AppTheme.mediumBorderRadius),
+                                      ),
+                                      child: Padding(
+                                        padding: EdgeInsets.all(
+                                            AppTheme.smallPadding),
+                                        child: Align(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(
+                                                "${channelSettings["streamKey"]}")),
+                                      ),
+                                    ),
+                                  ),
+                                  Expanded(child: Container()),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        Expanded(child: Container()),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+                      );
+                    } else {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                  }),
             ),
           ],
         ));

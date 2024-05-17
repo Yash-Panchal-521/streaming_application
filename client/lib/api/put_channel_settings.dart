@@ -33,6 +33,7 @@ putChannelSettings(
         });
     if (res.statusCode == 200) {
       var data = jsonDecode(res.body);
+      customSnackbar(context, 200, "Successfully Changed");
       return data;
     } else {
       customSnackbar(context, res.statusCode, res.body);
