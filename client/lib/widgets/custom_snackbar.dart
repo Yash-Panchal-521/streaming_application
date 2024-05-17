@@ -9,12 +9,19 @@ customSnackbar(BuildContext context, int statusCode, String message) {
     content: AwesomeSnackbarContent(
       titleFontSize: 16,
       messageFontSize: 14,
-      title: 'Oops!',
+      title: statusCode == 200 ? 'Success' : 'Oops!',
       message: message,
-      contentType: statusCode == 400 ? ContentType.warning : ContentType.failure,
+      contentType: statusCode == 200
+          ? ContentType.success
+          : statusCode == 400
+              ? ContentType.warning
+              : ContentType.failure,
     ),
   );
   return ScaffoldMessenger.of(context)
     ..hideCurrentSnackBar()
-    ..showSnackBar(snackBar, snackBarAnimationStyle: AnimationStyle(curve: Curves.easeInOutCubic, duration: const Duration(milliseconds: 500)));
+    ..showSnackBar(snackBar,
+        snackBarAnimationStyle: AnimationStyle(
+            curve: Curves.easeInOutCubic,
+            duration: const Duration(milliseconds: 500)));
 }

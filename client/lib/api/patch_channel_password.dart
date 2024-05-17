@@ -7,24 +7,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
-getChannelSettings(BuildContext context) async {
+patchChannelPassword(
+    BuildContext context, String password, String newPassword) async {
   try {
     FlutterSecureStorage storage = const FlutterSecureStorage();
     String? token = await storage.read(key: 'token');
-    var res = await http.get(
-      Uri.parse(Api.channelSettingsURL),
+    var body = jsonEncode({"password": password, "newPassword": newPassword});
+    var res = await http.patch(
+      Uri.parse(Api.passwordSettingsURL),
+      body: body,
       headers: {
         'Content-Type': 'application/json',
         'authorization': 'Bearer $token'
       },
     );
-
-    if (res.statusCode == 200) {
-      var data = jsonDecode(res.body);
-      return data;
-    } else {
-      customSnackbar(context, res.statusCode, res.body);
-    }
+    customSnackbar(context, res.statusCode, res.body);
   } on Exception catch (e) {
     errorSnackBar(e, context);
   }

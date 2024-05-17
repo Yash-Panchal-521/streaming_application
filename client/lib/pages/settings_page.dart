@@ -1,4 +1,3 @@
-import 'package:client/api/get_channel_settings.dart';
 import 'package:client/theme/theme.dart';
 import 'package:client/utils/avatar_url_validator.dart';
 import 'package:client/utils/build_text_field.dart';
@@ -64,18 +63,23 @@ class _SettingsPageState extends State<SettingsPage> {
         body: Flex(
           direction: Axis.horizontal,
           children: [
-            Flexible(flex: 1, fit: FlexFit.tight, child: SideNavBar(followedChannels: followedChannels)),
+            Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: SideNavBar(followedChannels: followedChannels)),
             Flexible(
               flex: 9,
               fit: FlexFit.tight,
               child: Column(
                 children: [
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
+                    padding:
+                        EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
                     alignment: Alignment.center,
                     child: Text(
                       "Channel Settings",
-                      style: textTheme.headlineMedium!.copyWith(color: colors.primary),
+                      style: textTheme.headlineMedium!
+                          .copyWith(color: colors.primary),
                     ),
                   ),
                   Form(
@@ -83,11 +87,14 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
+                          padding: EdgeInsets.symmetric(
+                              vertical: AppTheme.smallPadding),
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Expanded(child: Text("Username", style: textTheme.bodyMedium!)),
+                              Expanded(
+                                  child: Text("Username",
+                                      style: textTheme.bodyMedium!)),
                               Expanded(
                                 child: buildTextField(
                                   hintText: "Username",
@@ -102,11 +109,14 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
+                          padding: EdgeInsets.symmetric(
+                              vertical: AppTheme.smallPadding),
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Expanded(child: Text("Title", style: textTheme.bodyMedium!)),
+                              Expanded(
+                                  child: Text("Title",
+                                      style: textTheme.bodyMedium!)),
                               Expanded(
                                 child: buildTextField(
                                   hintText: "Title",
@@ -126,11 +136,14 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
+                          padding: EdgeInsets.symmetric(
+                              vertical: AppTheme.smallPadding),
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Expanded(child: Text("Avatar URL", style: textTheme.bodyMedium!)),
+                              Expanded(
+                                  child: Text("Avatar URL",
+                                      style: textTheme.bodyMedium!)),
                               Expanded(
                                 child: buildTextField(
                                   hintText: "Avatar URL",
@@ -145,11 +158,14 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
+                          padding: EdgeInsets.symmetric(
+                              vertical: AppTheme.smallPadding),
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Expanded(child: Text("Description", style: textTheme.bodyMedium!)),
+                              Expanded(
+                                  child: Text("Description",
+                                      style: textTheme.bodyMedium!)),
                               Expanded(
                                 child: buildTextField(
                                   hintText: "Description",
@@ -177,10 +193,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                   onPressed: () {
                                     if (formKey.currentState!.validate()) {
                                       setState(() {
-                                        channelSettings["username"] = usernameController.text;
-                                        channelSettings["title"] = titleController.text;
-                                        channelSettings["description"] = descriptionController.text;
-                                        channelSettings["avatarUrl"] = avatarUrlController.text;
+                                        channelSettings["username"] =
+                                            usernameController.text;
+                                        channelSettings["title"] =
+                                            titleController.text;
+                                        channelSettings["description"] =
+                                            descriptionController.text;
+                                        channelSettings["avatarUrl"] =
+                                            avatarUrlController.text;
                                       });
                                     }
                                   },
@@ -199,23 +219,29 @@ class _SettingsPageState extends State<SettingsPage> {
                     child: Column(
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: AppTheme.smallPadding),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: AppTheme.smallPadding),
                           child: Divider(color: colors.scrim.withOpacity(0.5)),
                         ),
                         Container(
-                          padding: EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
+                          padding: EdgeInsets.symmetric(
+                              vertical: AppTheme.smallPadding),
                           alignment: Alignment.center,
                           child: Text(
                             "Change Password",
-                            style: textTheme.headlineMedium!.copyWith(color: colors.primary),
+                            style: textTheme.headlineMedium!
+                                .copyWith(color: colors.primary),
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
+                          padding: EdgeInsets.symmetric(
+                              vertical: AppTheme.smallPadding),
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Expanded(child: Text("Current Password", style: textTheme.bodyMedium!)),
+                              Expanded(
+                                  child: Text("Current Password",
+                                      style: textTheme.bodyMedium!)),
                               Expanded(
                                 child: buildTextField(
                                   hintText: "Current Password",
@@ -242,11 +268,14 @@ class _SettingsPageState extends State<SettingsPage> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
+                          padding: EdgeInsets.symmetric(
+                              vertical: AppTheme.smallPadding),
                           child: Row(
                             children: [
                               Expanded(child: Container()),
-                              Expanded(child: Text("New Password", style: textTheme.bodyMedium!)),
+                              Expanded(
+                                  child: Text("New Password",
+                                      style: textTheme.bodyMedium!)),
                               Expanded(
                                 child: buildTextField(
                                   hintText: "New Password",
@@ -278,7 +307,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                 flex: 2,
                                 child: primaryElevatedButtonWidget(
                                   onPressed: () {
-                                    if (changePasswordFormKey.currentState!.validate()) {
+                                    if (changePasswordFormKey.currentState!
+                                        .validate()) {
                                       // Change password logic
                                     }
                                   },
@@ -294,24 +324,32 @@ class _SettingsPageState extends State<SettingsPage> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: AppTheme.smallPadding),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: AppTheme.smallPadding),
                     child: Divider(color: colors.scrim.withOpacity(0.5)),
                   ),
                   Padding(
-                    padding: EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
+                    padding:
+                        EdgeInsets.symmetric(vertical: AppTheme.smallPadding),
                     child: Row(
                       children: [
                         Expanded(child: Container()),
-                        Expanded(child: Text("Stream Key", style: textTheme.bodyMedium!)),
+                        Expanded(
+                            child: Text("Stream Key",
+                                style: textTheme.bodyMedium!)),
                         Expanded(
                           child: Container(
                             decoration: BoxDecoration(
                               color: colors.scrim.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(AppTheme.mediumBorderRadius),
+                              borderRadius: BorderRadius.circular(
+                                  AppTheme.mediumBorderRadius),
                             ),
                             child: Padding(
                               padding: EdgeInsets.all(AppTheme.smallPadding),
-                              child: Align(alignment: Alignment.centerLeft, child: Text("${channelSettings["streamKey"]}")),
+                              child: Align(
+                                  alignment: Alignment.centerLeft,
+                                  child:
+                                      Text("${channelSettings["streamKey"]}")),
                             ),
                           ),
                         ),
