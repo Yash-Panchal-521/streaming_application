@@ -1,9 +1,10 @@
-import 'package:client/api/login_api.dart';
+import 'package:client/api/post_login.dart';
 import 'package:client/routes/app_routes.dart';
+import 'package:client/utils/build_text_field.dart';
+import 'package:client/utils/email_validator.dart';
+import 'package:client/utils/password_validator.dart';
 import 'package:client/widgets/elevated_button.dart';
-import 'package:client/widgets/text_field_decoration.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:vrouter/vrouter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,7 +19,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordController = TextEditingController();
   bool passwordVisible = false;
   bool isPasswordVisible = false;
-  GlobalKey<FormState> _formKey = GlobalKey();
+  final GlobalKey<FormState> _formKey = GlobalKey();
   @override
   Widget build(BuildContext context) {
     ThemeData theme = Theme.of(context);
@@ -99,14 +100,12 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              TextFormField(
+              buildTextField(
+                hintText: "Enter Your Email",
                 controller: emailController,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
                 validator: validateEmail,
-                decoration: textFieldDecoration(
-                  hintText: "Enter Your Email",
-                  colors: colors,
-                ),
+                colors: colors,
+                textTheme: textTheme,
               ),
               const SizedBox(height: 20),
               Padding(
@@ -118,19 +117,17 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              TextFormField(
-                autovalidateMode: AutovalidateMode.onUserInteraction,
+              buildTextField(
+                hintText: "Enter Your Password",
                 controller: passwordController,
-                validator: (value) => validatePassword(value),
-                obscureText: !passwordVisible,
-                decoration: textFieldDecoration(
-                    hintText: "Enter Your Password",
-                    colors: colors,
-                    isPassword: true,
-                    passwordVisible: passwordVisible,
-                    onVisibiltyToggled: () => setState(() {
-                          passwordVisible = !passwordVisible;
-                        })),
+                validator: validatePassword,
+                colors: colors,
+                textTheme: textTheme,
+                isPassword: true,
+                passwordVisible: passwordVisible,
+                onVisibiltyToggled: () => setState(() {
+                  passwordVisible = !passwordVisible;
+                }),
               ),
               const SizedBox(height: 20),
               primaryElevatedButtonWidget(
@@ -156,53 +153,5 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Enter your email';
-    }
-    Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = RegExp(pattern as String);
-    if (!regex.hasMatch(value)) {
-      return 'Enter Valid Email';
-    } else {
-      return null;
-    }
-  }
-
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Enter your password';
-    }
-
-    // Check if password contains at least one uppercase letter
-    if (!value.contains(RegExp(r'[A-Z]'))) {
-      return 'Password must contain at least one uppercase letter';
-    }
-
-    // Check if password contains at least one lowercase letter
-    if (!value.contains(RegExp(r'[a-z]'))) {
-      return 'Password must contain at least one lowercase letter';
-    }
-
-    // Check if password contains at least one digit
-    if (!value.contains(RegExp(r'[0-9]'))) {
-      return 'Password must contain at least one digit';
-    }
-
-    // Check if password contains at least one special character
-    if (!value.contains(RegExp(r'[!@#\$&*~]'))) {
-      return 'Password must contain at least one special character';
-    }
-
-    // Check if password length is at least 6 characters
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters long';
-    }
-
-    // Password meets all criteria
-    return null;
   }
 }

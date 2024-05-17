@@ -15,13 +15,11 @@ InputDecoration textFieldDecoration({
       horizontal: 16,
       vertical: 12,
     ), // Adjust padding here
-    suffix: isPassword
+    suffixIcon: isPassword
         ? IconButton(
             icon: Icon(
               size: 16,
-              passwordVisible
-                  ? Icons.visibility_outlined
-                  : Icons.visibility_off_outlined,
+              passwordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
             ),
             onPressed: onVisibiltyToggled,
           )
@@ -42,7 +40,6 @@ InputDecoration textFieldDecoration({
       borderSide: BorderSide(color: colors.error, width: 2),
       borderRadius: BorderRadius.circular(0),
     ),
-    errorStyle:
-        TextStyle(color: colors.error, backgroundColor: colors.onPrimary),
+    errorStyle: TextStyle(color: colors.error, backgroundColor: colors.onPrimary),
   );
 }

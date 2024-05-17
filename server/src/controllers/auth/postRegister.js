@@ -35,7 +35,7 @@ export const postRegister = async (req, res) => {
       }
     );
 
-    return res.status(201).json({
+    return res.status(200).json({
       userDetails: {
         email,
         username,
@@ -47,5 +47,4 @@ export const postRegister = async (req, res) => {
     return res.status(500).send(`Error oocured: ${err}`);
   }
 
-  return res.send("User is added to the db");
 };

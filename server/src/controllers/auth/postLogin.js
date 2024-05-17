@@ -10,6 +10,8 @@ export const postLogin = async (req, res) => {
       email: email,
     });
 
+    if(!user) return res.status(400).send("User not found. Please register.");
+
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         {
